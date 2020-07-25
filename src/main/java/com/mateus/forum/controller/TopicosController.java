@@ -3,11 +3,15 @@ package com.mateus.forum.controller;
 import java.net.URI;
 import java.util.List;
 
+import javax.transaction.Transactional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -40,5 +44,19 @@ public class TopicosController {
 		topicoRepository.save(topico);
 		URI uri = uriBuilder.path("/topicos/{id}").buildAndExpand(topico.getId()).toUri();
 		return ResponseEntity.created(uri).body( new TopicoDTO(topico));
+	}
+	
+	@GetMapping("/{id}")
+	public TopicoDTO detalhar(@PathVariable Long id) {
+		Topico topico = topicoRepository.getOne(id);
+		return new TopicoDTO(topico);
+	}
+	
+	@PutMapping("/{id}")
+	@Transactional
+	public ResponseEntity<TopicoDTO> atualizar(@PathVariable Long id, @RequestBody @Validated TopicoForm form) {
+		Topico topico = form.atualizar(id, topicoRepository);
+		return ResponseEntity.ok(new TopicoDTO(topico) );
+		
 	}
 }
