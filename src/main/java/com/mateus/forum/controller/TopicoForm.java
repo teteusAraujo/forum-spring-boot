@@ -3,10 +3,14 @@ package com.mateus.forum.controller;
 import com.mateus.forum.model.Curso;
 import com.mateus.forum.model.Topico;
 import com.mateus.forum.repository.CursoRepository;
+import com.sun.istack.NotNull;
 
 public class TopicoForm {
+	@NotNull 
 	private String  titulo;
+	@NotNull
 	private String mensagem;
+	@NotNull
 	private String nomeCurso;
 	public String getTitulo() {
 		return titulo;
